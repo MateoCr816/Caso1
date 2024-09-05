@@ -1,32 +1,44 @@
 package caso;
 
-class DepositoProd {
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class DepositoProd {
     private int capacidad;
-    private int numeroDeposito;
+    private Queue<Producto> productos;
 
-    // Constructor
-    public DepositoProd(int capacidad, int numeroDeposito) {
+    public DepositoProd(int capacidad) {
         this.capacidad = capacidad;
-        this.numeroDeposito = numeroDeposito;
+        this.productos = new LinkedList<>();
     }
 
-    // Getter for capacidad
-    public int getCapacidad() {
-        return capacidad;
+    public boolean almacenarProducto(Producto producto) {
+        if (productos.size() < capacidad) {
+            productos.add(producto);
+            System.out.println("Producto almacenado: " + producto);
+            return true;
+        } else {
+            System.out.println("Deposito de Producción lleno. No se puede almacenar más productos.");
+            return false;
+        }
     }
 
-    // Setter for capacidad
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
+    public Producto retirarProducto() {
+        if (!productos.isEmpty()) {
+            Producto producto = productos.poll();
+            System.out.println("Producto retirado del depósito: " + producto);
+            return producto;
+        } else {
+            System.out.println("Deposito de Producción vacío.");
+            return null;
+        }
     }
 
-    // Getter for numeroDeposito
-    public int getNumeroDeposito() {
-        return numeroDeposito;
+    public boolean estaVacio() {
+        return productos.isEmpty();
     }
 
-    // Setter for numeroDeposito
-    public void setNumeroDeposito(int numeroDeposito) {
-        this.numeroDeposito = numeroDeposito;
+    public boolean estaLleno() {
+        return productos.size() >= capacidad;
     }
 }

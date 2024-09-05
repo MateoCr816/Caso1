@@ -1,20 +1,29 @@
 package caso;
 
 public class Productor {
-    private String tipo;
+    private String tipo;  // "A" o "B"
+    private int numProductos;
+    private DepositoProd depositoProduccion;
 
-    // Constructor
-    public Productor(String tipo) {
+    public Productor(String tipo, int numProductos, DepositoProd depositoProduccion) {
         this.tipo = tipo;
+        this.numProductos = numProductos;
+        this.depositoProduccion = depositoProduccion;
     }
 
-    // Getter
-    public String getTipo() {
-        return tipo;
-    }
+    public void producir() {
+        // Producir productos terminados
+        for (int i = 0; i < numProductos; i++) {
+            System.out.println("Productor de tipo " + tipo + " inició la producción del producto " + (i + 1));
 
-    // Setter
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+            // Simulación de producción de un producto
+            // Aquí se puede agregar lógica de espera o procesamiento si fuera necesario
+            System.out.println("Productor de tipo " + tipo + " terminó la producción del producto " + (i + 1));
+
+            // Almacenar el producto terminado "FIN_A" o "FIN_B" en el depósito de producción
+            Producto productoFin = new Producto("FIN_" + tipo);
+            depositoProduccion.almacenarProducto(productoFin);
+            System.out.println("Producto terminado " + productoFin.getTipo() + " almacenado en el depósito de producción.");
+        }
     }
 }
