@@ -33,4 +33,5 @@ public class Cinta {
     public boolean estaVacia() {
         return this.producto == null;
     }
+
 }

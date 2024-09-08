@@ -15,4 +15,5 @@ public class Producto {
     public String toString() {
         return "Producto{" + "tipo='" + tipo + '\'' + '}';
     }
+    
 }
