@@ -5,6 +5,8 @@ public class OperarioInterno extends Thread {
     private Cinta cinta;
     private DepositoDist depositoDistribucion;
     private int capDepDist;
+    private int finA = 0; // Contador de productos "FIN_A"
+    private int finB = 0; // Contador de productos "FIN_B"
 
     public OperarioInterno(DepositoProd depositoProduccion, Cinta cinta, DepositoDist depositoDistribucion, int capDepDist) {
         this.depositoProduccion = depositoProduccion;
@@ -23,15 +25,14 @@ public class OperarioInterno extends Thread {
             while (true) {
                 // Mover producto terminado del depósito de producción a la cinta
                 synchronized (depositoProduccion) {
-                    while (!cinta.estaVacia() || depositoProduccion.estaVacio()) { //Cinta llena o deposito de produccion vacio
+                    while (!cinta.estaVacia() || depositoProduccion.estaVacio()) { // Cinta llena o depósito vacío
                         depositoProduccion.wait();
                     }
                     Producto producto = depositoProduccion.retirarProducto();
                     if (producto != null) {
                         synchronized (cinta) {
                             cinta.moverProducto(producto);
-                            //System.out.println("Operario interno movió producto a la cinta: " + producto);
-                            cinta.notifyAll();  // Notificar a otros hilos que hay un producto en la cinta
+                            cinta.notifyAll();  // Notificar que hay un producto en la cinta
                         }
                     }
                 }
@@ -39,24 +40,31 @@ public class OperarioInterno extends Thread {
                 // Mover producto de la cinta a la pila final
                 synchronized (cinta) {
                     while (cinta.estaVacia() || depositoDistribucion.estaLleno()) {
-                        // Esperar si la cinta está vacía o el depósito de distribución está lleno
                         cinta.wait();
                     }
                     Producto producto = cinta.retirarProducto();
                     if (producto != null) {
                         synchronized (depositoDistribucion) {
                             depositoDistribucion.almacenarProducto(producto);
-                            //System.out.println("Operario interno movió producto terminado a la pila final: " + producto);
                             depositoDistribucion.notifyAll();  // Notificar que se movió un producto al depósito
+                        }
+                        
+                        // Si el producto es "FIN_A" o "FIN_B", aumentar el contador
+                        if (producto.getTipo().equals("FIN_A")) {
+                            finA++;
+                        } else if (producto.getTipo().equals("FIN_B")) {
+                            finB++;
                         }
                     }
                 }
 
-                // Verificar si la pila ha alcanzado su capacidad máxima
-                if (depositoDistribucion.estaLleno()) {
-                    System.out.println("La pila final ha alcanzado su capacidad máxima. Finalizando el programa.");
-                    break;
+                // Verificar si ha procesado dos "FIN_A" y dos "FIN_B"
+                if (finA == 2 && finB == 2) {
+                    System.out.println("El operario interno ha procesado 2 'FIN_A' y 2 'FIN_B'. Terminando el trabajo.");
                 }
+
+                // Yield para espera semi-activa
+                Thread.yield();
             }
         } catch (InterruptedException e) {
             System.out.println("El operario interno fue interrumpido.");
