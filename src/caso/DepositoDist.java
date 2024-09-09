@@ -23,6 +23,25 @@ public class DepositoDist {
         }
     }
 
+    public synchronized Producto retirarProductoDeTipo(String tipo) {
+        for (Producto producto : productos) {
+            if (producto.getTipo().endsWith(tipo)) {
+                productos.remove(producto);
+                return producto;
+            }
+        }
+        return null;  // No hay productos del tipo solicitado
+    }
+
+    public synchronized boolean hayProductoDeTipo(String tipo) {
+        for (Producto producto : productos) {
+            if (producto.getTipo().endsWith(tipo)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Producto retirarProducto() {
         if (!productos.isEmpty()) {
             Producto producto = productos.poll();

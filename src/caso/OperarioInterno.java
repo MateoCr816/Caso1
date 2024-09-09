@@ -61,6 +61,7 @@ public class OperarioInterno extends Thread {
                 // Verificar si ha procesado dos "FIN_A" y dos "FIN_B"
                 if (finA == 2 && finB == 2) {
                     System.out.println("El operario interno ha procesado 2 'FIN_A' y 2 'FIN_B'. Terminando el trabajo.");
+                    break;
                 }
 
                 // Yield para espera semi-activa

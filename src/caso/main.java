@@ -44,13 +44,13 @@ public class main {
 
         // Operario interno para mover productos de la cinta a la pila
         OperarioInterno operarioInterno = new OperarioInterno(depositoProduccion, cinta, depositoDistribucion, capDepDist);
-        operarioInterno.moverProductos();
+        operarioInterno.start();
 
         // Distribuir productos
-        //distribuidorA1.distribuir();
-        //distribuidorA2.distribuir();
-        //distribuidorB1.distribuir();
-        //distribuidorB2.distribuir();
+        distribuidorA1.start();
+        distribuidorA2.start();
+        distribuidorB1.start();
+        distribuidorB2.start();
 
         scanner.close();
     }
